@@ -2,7 +2,7 @@
  * @Date: 2021-07-12 23:36:36
  * @LastEditors: 枫
  * @description: description
- * @LastEditTime: 2021-07-13 16:00:43
+ * @LastEditTime: 2021-07-13 20:48:36
  * @FilePath: /forum-server/src/config/config.default.ts
  */
 import { EggAppConfig, EggAppInfo, PowerPartial } from 'egg';
@@ -16,7 +16,7 @@ export default (appInfo: EggAppInfo) => {
   config.keys = appInfo.name + '_1626104196042_7134';
 
   // add your config here
-  config.middleware = ['verification'];
+  config.middleware = [];
 
   config.midwayFeature = {
     // true 代表使用 midway logger
@@ -27,7 +27,6 @@ export default (appInfo: EggAppInfo) => {
   // config.security = {
   //   csrf: false,
   // };
-
   return config;
 };
 
@@ -40,4 +39,17 @@ export const orm = {
   database: 'forum',
   synchronize: true, // 如果第一次使用，不存在表，有同步的需求可以写 true
   logging: false,
+};
+// 配置CORS
+export const cors = {
+  origin: '*',
+  allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
+};
+// 允许跨域的域名
+export const security = {
+  domainWhiteList: ['http://localhost:8000'], //  允许跨域的域名
+};
+// jwt密钥盐值
+export const jwt = {
+  security: 'xiaofeng',
 };

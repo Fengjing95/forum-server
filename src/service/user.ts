@@ -2,7 +2,7 @@
  * @Date: 2021-07-12 23:36:36
  * @LastEditors: 枫
  * @description: description
- * @LastEditTime: 2021-07-13 19:08:26
+ * @LastEditTime: 2021-07-13 20:42:41
  * @FilePath: /forum-server/src/service/user.ts
  */
 import { Provide } from '@midwayjs/decorator';
@@ -80,7 +80,7 @@ export class UserService {
 
     try {
       const userResult = await this.userModel.insert(user);
-      return { success: true, ...userResult };
+      return { success: true, data: userResult };
     } catch (error) {
       return { success: false, message: error.message };
     }

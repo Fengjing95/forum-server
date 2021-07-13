@@ -2,7 +2,7 @@
  * @Date: 2021-07-12 23:36:36
  * @LastEditors: 枫
  * @description: description
- * @LastEditTime: 2021-07-13 16:25:41
+ * @LastEditTime: 2021-07-13 20:50:59
  * @FilePath: /forum-server/src/controller/user.ts
  */
 import { Body } from '@midwayjs/decorator';
@@ -22,7 +22,7 @@ import { IResponseData } from '../interface';
 import { UserService } from '../service/user';
 
 @Provide()
-@Controller('/api/user')
+@Controller('/api/user', { middleware: ['verification'] })
 export class UserController {
   @Inject()
   ctx: Context;
@@ -46,6 +46,7 @@ export class UserController {
       }
       return ResponseData.success(user);
     } catch (error) {
+      this.ctx.status = codeEnum.BAD_REQUEST;
       return ResponseData.error(codeEnum.BAD_REQUEST, error.message);
     }
   }
@@ -56,6 +57,7 @@ export class UserController {
     if (result.success) {
       return ResponseData.success(result);
     } else {
+      this.ctx.status = codeEnum.SERVER_ERROR;
       return ResponseData.error(codeEnum.SERVER_ERROR, result.message);
     }
   }
