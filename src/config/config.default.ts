@@ -2,7 +2,7 @@
  * @Date: 2021-07-12 23:36:36
  * @LastEditors: 枫
  * @description: description
- * @LastEditTime: 2021-07-13 14:11:25
+ * @LastEditTime: 2021-07-13 16:00:43
  * @FilePath: /forum-server/src/config/config.default.ts
  */
 import { EggAppConfig, EggAppInfo, PowerPartial } from 'egg';
@@ -16,7 +16,7 @@ export default (appInfo: EggAppInfo) => {
   config.keys = appInfo.name + '_1626104196042_7134';
 
   // add your config here
-  config.middleware = [];
+  config.middleware = ['verification'];
 
   config.midwayFeature = {
     // true 代表使用 midway logger

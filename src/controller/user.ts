@@ -2,8 +2,8 @@
  * @Date: 2021-07-12 23:36:36
  * @LastEditors: 枫
  * @description: description
- * @LastEditTime: 2021-07-13 15:27:20
- * @FilePath: /forum-server/src/controller/api.ts
+ * @LastEditTime: 2021-07-13 16:25:41
+ * @FilePath: /forum-server/src/controller/user.ts
  */
 import { Body } from '@midwayjs/decorator';
 import {
@@ -22,8 +22,8 @@ import { IResponseData } from '../interface';
 import { UserService } from '../service/user';
 
 @Provide()
-@Controller('/api')
-export class APIController {
+@Controller('/api/user')
+export class UserController {
   @Inject()
   ctx: Context;
 
