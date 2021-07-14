@@ -2,7 +2,7 @@
  * @Date: 2021-07-12 23:36:36
  * @LastEditors: 枫
  * @description: description
- * @LastEditTime: 2021-07-14 10:34:29
+ * @LastEditTime: 2021-07-14 11:04:01
  * @FilePath: /forum-server/src/config/config.default.ts
  */
 import { EggAppConfig, EggAppInfo, PowerPartial } from 'egg';
@@ -51,5 +51,5 @@ export const security = {
 };
 // jwt密钥盐值
 export const jwt = {
-  signature: 'xiaofeng',
+  signature: 'eGlhb2Zlbmc=', // xiaofeng -> base64
 };
