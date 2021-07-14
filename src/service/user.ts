@@ -2,7 +2,7 @@
  * @Date: 2021-07-12 23:36:36
  * @LastEditors: 枫
  * @description: description
- * @LastEditTime: 2021-07-14 08:59:35
+ * @LastEditTime: 2021-07-14 09:32:03
  * @FilePath: /forum-server/src/service/user.ts
  */
 import { Provide } from '@midwayjs/decorator';
@@ -64,13 +64,11 @@ export class UserService {
     // user.avatar = '12';
     // user.signature = '123';
 
-    try {
-      const userResult = await this.userModel.insert(user);
-      console.log(userResult);
+    const userResult = await this.userModel.insert(user);
+    if (userResult) {
       return { success: true, ...userResult };
-    } catch (error) {
-      console.log(error);
-      return { success: false, message: error.message };
+    } else {
+      return { success: false, message: '创建失败' };
     }
   }
 
@@ -91,11 +89,11 @@ export class UserService {
     user.password = password;
     user.phone = phone;
 
-    try {
-      const userResult = await this.userModel.insert(user);
+    const userResult = await this.userModel.insert(user);
+    if (userResult) {
       return { success: true, data: userResult };
-    } catch (error) {
-      return { success: false, message: error.message };
+    } else {
+      return { success: false, message: '注册失败' };
     }
   }
 }

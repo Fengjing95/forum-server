@@ -2,7 +2,7 @@
  * @Date: 2021-07-13 16:30:51
  * @LastEditors: 枫
  * @description: description
- * @LastEditTime: 2021-07-14 09:04:31
+ * @LastEditTime: 2021-07-14 09:34:05
  * @FilePath: /forum-server/src/controller/auth.ts
  */
 import {
@@ -34,6 +34,9 @@ export class AuthController {
     @Body('username') name: string,
     @Body('password') password: string
   ) {
+    if (!name || !password) {
+      return ResponseData.error(codeEnum.BAD_REQUEST, '用户名或密码不可为空');
+    }
     let result;
     const oldUser = await this.userService.getUserByName(name);
     if (
@@ -61,6 +64,9 @@ export class AuthController {
     @Body('password') password: string,
     @Body('phone') phone: string
   ) {
+    if (!name || !password || !phone) {
+      return ResponseData.error(codeEnum.BAD_REQUEST, '必填信息不可为空');
+    }
     const oldUser = await this.userService.getUserByName(name);
     if (oldUser.success) {
       this.ctx.status = codeEnum.BAD_REQUEST;

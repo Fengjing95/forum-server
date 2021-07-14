@@ -2,7 +2,7 @@
  * @Date: 2021-07-12 23:36:36
  * @LastEditors: 枫
  * @description: description
- * @LastEditTime: 2021-07-14 09:07:29
+ * @LastEditTime: 2021-07-14 09:26:44
  * @FilePath: /forum-server/src/controller/user.ts
  */
 import { Body } from '@midwayjs/decorator';
@@ -41,20 +41,15 @@ export class UserController {
     @Query() id: number,
     @Query() name: string
   ): Promise<IResponseData> {
-    try {
-      let user: IServiceDTO<User>;
-      if (id) {
-        user = await this.userService.getUserById(id);
-      } else if (name) {
-        user = await this.userService.getUserByName(name);
-      } else {
-        throw new Error('Bad Request');
-      }
-      return ResponseData.success(user);
-    } catch (error) {
-      this.ctx.status = codeEnum.BAD_REQUEST;
-      return ResponseData.error(codeEnum.BAD_REQUEST, error.message);
+    let user: IServiceDTO<User>;
+    if (id) {
+      user = await this.userService.getUserById(id);
+    } else if (name) {
+      user = await this.userService.getUserByName(name);
+    } else {
+      return ResponseData.error(codeEnum.BAD_REQUEST, 'Bad Request');
     }
+    return ResponseData.success(user);
   }
 
   /**
