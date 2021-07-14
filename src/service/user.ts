@@ -2,7 +2,7 @@
  * @Date: 2021-07-12 23:36:36
  * @LastEditors: 枫
  * @description: description
- * @LastEditTime: 2021-07-14 09:32:03
+ * @LastEditTime: 2021-07-14 10:34:16
  * @FilePath: /forum-server/src/service/user.ts
  */
 import { Provide } from '@midwayjs/decorator';
@@ -28,7 +28,7 @@ export class UserService {
     if (user) {
       return { success: true, data: user };
     } else {
-      return { success: false };
+      return { success: false, message: 'User not found' };
     }
   }
 
@@ -44,7 +44,7 @@ export class UserService {
     if (user) {
       return { success: true, data: user };
     } else {
-      return { success: false };
+      return { success: false, message: 'User not found' };
     }
   }
 

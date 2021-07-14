@@ -2,7 +2,7 @@
  * @Date: 2021-07-13 16:30:51
  * @LastEditors: 枫
  * @description: description
- * @LastEditTime: 2021-07-14 09:34:05
+ * @LastEditTime: 2021-07-14 10:58:02
  * @FilePath: /forum-server/src/controller/auth.ts
  */
 import {
@@ -16,6 +16,7 @@ import {
 import { codeEnum, ResponseData } from '../exceptions/ResponseData';
 import { UserService } from '../service/user';
 import { Context } from 'egg';
+import { jwt as JWT } from '../config/config.default';
 
 @Provide()
 @Controller('/api/auth')
@@ -45,11 +46,15 @@ export class AuthController {
       oldUser.data.password === password
     ) {
       // token生成
-      const token = await this.jwt.sign({
-        username: oldUser.data.name,
-        id: oldUser.data.id,
-        phone: oldUser.data.phone,
-      });
+      const token = await this.jwt.sign(
+        {
+          username: oldUser.data.name,
+          id: oldUser.data.id,
+          phone: oldUser.data.phone,
+        },
+        JWT.signature,
+        { expiresIn: 60 * 60 * 24 }
+      );
       result = ResponseData.success({ token });
     } else {
       this.ctx.status = codeEnum.BAD_REQUEST;
@@ -74,11 +79,15 @@ export class AuthController {
     }
     const result = await this.userService.signUser(name, password, phone);
     if (result.success) {
-      const token = await this.jwt.sign({
-        username: name,
-        id: result.data.identifiers[0].id,
-        phone: phone,
-      });
+      const token = await this.jwt.sign(
+        {
+          username: name,
+          id: result.data.identifiers[0].id,
+          phone: phone,
+        },
+        JWT.signature,
+        { expiresIn: 60 * 60 * 24 }
+      );
       return ResponseData.success({ token });
     } else {
       this.ctx.status = codeEnum.BAD_REQUEST;

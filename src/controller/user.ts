@@ -2,7 +2,7 @@
  * @Date: 2021-07-12 23:36:36
  * @LastEditors: 枫
  * @description: description
- * @LastEditTime: 2021-07-14 09:26:44
+ * @LastEditTime: 2021-07-14 10:12:03
  * @FilePath: /forum-server/src/controller/user.ts
  */
 import { Body } from '@midwayjs/decorator';
@@ -49,7 +49,11 @@ export class UserController {
     } else {
       return ResponseData.error(codeEnum.BAD_REQUEST, 'Bad Request');
     }
-    return ResponseData.success(user);
+    if (user.success) {
+      return ResponseData.success(user.data);
+    } else {
+      return ResponseData.error(codeEnum.BAD_REQUEST, user.message);
+    }
   }
 
   /**
