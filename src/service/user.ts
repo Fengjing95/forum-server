@@ -2,13 +2,14 @@
  * @Date: 2021-07-12 23:36:36
  * @LastEditors: 枫
  * @description: description
- * @LastEditTime: 2021-07-13 20:42:41
+ * @LastEditTime: 2021-07-14 08:59:35
  * @FilePath: /forum-server/src/service/user.ts
  */
 import { Provide } from '@midwayjs/decorator';
 import { InjectEntityModel } from '@midwayjs/orm';
 import { User } from '../entity/User';
-import { Repository } from 'typeorm';
+import { InsertResult, Repository } from 'typeorm';
+import { IServiceDTO } from '../interface';
 
 @Provide()
 export class UserService {
@@ -20,11 +21,15 @@ export class UserService {
    * @param {number} id 用户唯一标识
    * @return {User} 用户实例
    */
-  async getUserById(id: number) {
+  async getUserById(id: number): Promise<IServiceDTO<User>> {
     const user = await this.userModel.findOne({
       where: { id },
     });
-    return user;
+    if (user) {
+      return { success: true, data: user };
+    } else {
+      return { success: false };
+    }
   }
 
   /**
@@ -32,11 +37,15 @@ export class UserService {
    * @param {string} name 用户名
    * @return {User} 用户实例
    */
-  async getUserByName(name: string) {
+  async getUserByName(name: string): Promise<IServiceDTO<User>> {
     const user = await this.userModel.findOne({
       where: { name },
     });
-    return user;
+    if (user) {
+      return { success: true, data: user };
+    } else {
+      return { success: false };
+    }
   }
 
   /**
@@ -72,7 +81,11 @@ export class UserService {
    * @param {string} phone 手机
    * @return {*}
    */
-  async signUser(name: string, password: string, phone: string) {
+  async signUser(
+    name: string,
+    password: string,
+    phone: string
+  ): Promise<IServiceDTO<InsertResult>> {
     const user = new User();
     user.name = name;
     user.password = password;

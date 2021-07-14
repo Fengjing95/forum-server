@@ -2,7 +2,7 @@
  * @Date: 2021-07-13 16:30:51
  * @LastEditors: 枫
  * @description: description
- * @LastEditTime: 2021-07-13 20:58:01
+ * @LastEditTime: 2021-07-14 09:04:31
  * @FilePath: /forum-server/src/controller/auth.ts
  */
 import {
@@ -36,12 +36,16 @@ export class AuthController {
   ) {
     let result;
     const oldUser = await this.userService.getUserByName(name);
-    if (oldUser && oldUser.name === name && oldUser.password === password) {
+    if (
+      oldUser.success &&
+      oldUser.data.name === name &&
+      oldUser.data.password === password
+    ) {
       // token生成
       const token = await this.jwt.sign({
-        username: oldUser.name,
-        id: oldUser.id,
-        phone: oldUser.phone,
+        username: oldUser.data.name,
+        id: oldUser.data.id,
+        phone: oldUser.data.phone,
       });
       result = ResponseData.success({ token });
     } else {
@@ -58,7 +62,7 @@ export class AuthController {
     @Body('phone') phone: string
   ) {
     const oldUser = await this.userService.getUserByName(name);
-    if (oldUser) {
+    if (oldUser.success) {
       this.ctx.status = codeEnum.BAD_REQUEST;
       return ResponseData.error(codeEnum.BAD_REQUEST, '用户名已经存在');
     }

@@ -2,7 +2,7 @@
  * @Date: 2021-07-12 23:36:36
  * @LastEditors: 枫
  * @description: types
- * @LastEditTime: 2021-07-13 14:25:05
+ * @LastEditTime: 2021-07-14 09:04:16
  * @FilePath: /forum-server/src/interface/index.ts
  */
 
@@ -27,4 +27,13 @@ export interface IGetUserResponse {
   success: boolean;
   message: string;
   data: IUserOptions;
+}
+
+/**
+ * @description service方法返回值类型
+ */
+export interface IServiceDTO<T> {
+  success: boolean;
+  data?: T;
+  message?: string;
 }
