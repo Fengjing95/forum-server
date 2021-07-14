@@ -2,7 +2,7 @@
  * @Date: 2021-07-12 23:36:36
  * @LastEditors: 枫
  * @description: description
- * @LastEditTime: 2021-07-14 11:04:01
+ * @LastEditTime: 2021-07-14 17:24:56
  * @FilePath: /forum-server/src/config/config.default.ts
  */
 import { EggAppConfig, EggAppInfo, PowerPartial } from 'egg';
@@ -52,4 +52,29 @@ export const security = {
 // jwt密钥盐值
 export const jwt = {
   signature: 'eGlhb2Zlbmc=', // xiaofeng -> base64
+};
+// 非对称加密
+export const RSAKey = {
+  publicKey: `-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDOrFVMKiNvh5N8XcXWvGlyEAd3
+LDF5yggx1Jjmo/amyI5W4uUGf1UDktQxSaAJFQF+SSCe0wayg6QaZw880XqupK6J
+R7cWBNZnJX40abalBdS0qGZ5Hv2E7DM7IwjwHxLfSITs8iTXFLyf1ngAC0tMwhc2
+64x6hG4FXCvbWc3ptwIDAQAB
+-----END PUBLIC KEY-----`,
+  privateKey: `-----BEGIN PRIVATE KEY-----
+MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAM6sVUwqI2+Hk3xd
+xda8aXIQB3csMXnKCDHUmOaj9qbIjlbi5QZ/VQOS1DFJoAkVAX5JIJ7TBrKDpBpn
+DzzReq6krolHtxYE1mclfjRptqUF1LSoZnke/YTsMzsjCPAfEt9IhOzyJNcUvJ/W
+eAALS0zCFzbrjHqEbgVcK9tZzem3AgMBAAECgYEAt2Zshxs5uOYZthpMzuMBu6uH
+xHReL1JedUHQsZM89QIydd4BGQPzwCkSze4k6wpN+fAQ14AyiEWTYa6k8fZ+o1S7
+Ap1zdOd/vsJRKaQ7O5MLqsvcZ9izlYhMuOqqmG6zb/kLmaNFO1HldLG3pYx8ExwF
+CnYXL9My9qVEVRFX9FkCQQD3r2sxLDfsrFsJMH173B3bJNVrhotMRrT+1EeSqpkg
+I0SSwU21vuICGr50AJmfVyPT9kYspQxr1FBJOXJUrf4dAkEA1Zx2DHq8zZ2XT5TV
+/K4A/MveYImwTm+P+Q1n2v3FYEMVPjKkppt7RtOOsdFLR3Wd0lbF9FlI9czTtudc
+LCAO4wJAJn4LkZvGoTB0AWyYw8wEk88Yn9pMAbGnZUcGTIPYwkbY3FnQQuOEakFP
+weVp+npnZgSLCVspIATh6U9VNlXH/QJADEWJzpu6fwF/sNW3GWYRrnQz2U3vsAHe
+vosTnVQY47fW35TfOqcSBPagavzAG2HZaD0N8ES02VIkE4zlEa/hywJBALKSIi/W
+XZoc9KtemAgo0QX3Fe5hsweOxV8bIz+CP0SNK9FI8yvL8JxK+ceMA4R8rDASXPwp
+SKTHlmMqc+7Ed+c=
+-----END PRIVATE KEY-----`,
 };

@@ -2,7 +2,7 @@
  * @Date: 2021-07-13 16:30:51
  * @LastEditors: 枫
  * @description: description
- * @LastEditTime: 2021-07-14 10:58:02
+ * @LastEditTime: 2021-07-14 17:57:43
  * @FilePath: /forum-server/src/controller/auth.ts
  */
 import {
@@ -12,11 +12,14 @@ import {
   Post,
   Provide,
   Plugin,
+  Get,
 } from '@midwayjs/decorator';
 import { codeEnum, ResponseData } from '../exceptions/ResponseData';
 import { UserService } from '../service/user';
 import { Context } from 'egg';
 import { jwt as JWT } from '../config/config.default';
+import { RSAKey } from '../config/config.default';
+import { IResponseData } from '../interface';
 
 @Provide()
 @Controller('/api/auth')
@@ -30,11 +33,17 @@ export class AuthController {
   @Plugin()
   jwt: any;
 
-  @Post('/login')
+  /**
+   * @description: 登陆
+   * @param {string} name 用户名
+   * @param {string} password 密码（rsa公钥加密）
+   * @return {*}
+   */
+  @Post('/login', { middleware: ['rsa'] })
   async login(
     @Body('username') name: string,
     @Body('password') password: string
-  ) {
+  ): Promise<IResponseData> {
     if (!name || !password) {
       return ResponseData.error(codeEnum.BAD_REQUEST, '用户名或密码不可为空');
     }
@@ -63,12 +72,19 @@ export class AuthController {
     return result;
   }
 
-  @Post('/sign')
+  /**
+   * @description: 注册
+   * @param {string} name 用户名
+   * @param {string} password 密码（使用公钥加密）
+   * @param {string} phone 手机号
+   * @return {*}
+   */
+  @Post('/sign', { middleware: ['rsa'] })
   async sign(
     @Body('username') name: string,
     @Body('password') password: string,
     @Body('phone') phone: string
-  ) {
+  ): Promise<IResponseData> {
     if (!name || !password || !phone) {
       return ResponseData.error(codeEnum.BAD_REQUEST, '必填信息不可为空');
     }
@@ -96,5 +112,15 @@ export class AuthController {
         '注册失败: ' + result.message
       );
     }
+  }
+
+  /**
+   * @description: 获取公钥
+   * @param {*}
+   * @return {*}
+   */
+  @Get('/publicKey')
+  getPublicKey(): IResponseData {
+    return ResponseData.success({ publicKey: RSAKey.publicKey });
   }
 }

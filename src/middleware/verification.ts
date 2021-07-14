@@ -2,7 +2,7 @@
  * @Date: 2021-07-13 15:55:02
  * @LastEditors: 枫
  * @description: 全局token校验中间件
- * @LastEditTime: 2021-07-14 10:57:09
+ * @LastEditTime: 2021-07-14 12:12:36
  * @FilePath: /forum-server/src/middleware/verification.ts
  */
 import { Provide, Plugin } from '@midwayjs/decorator';
@@ -23,7 +23,7 @@ export class Verification implements IWebMiddleware {
       // } else {
       try {
         const authRes = this.jwt.verify(
-          ctx.request.header.authorization,
+          ctx.request.header.Authorization,
           JWT.signature
         );
         if (authRes) {
