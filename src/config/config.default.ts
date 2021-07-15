@@ -2,7 +2,7 @@
  * @Date: 2021-07-12 23:36:36
  * @LastEditors: 枫
  * @description: description
- * @LastEditTime: 2021-07-14 17:24:56
+ * @LastEditTime: 2021-07-15 10:47:14
  * @FilePath: /forum-server/src/config/config.default.ts
  */
 import { EggAppConfig, EggAppInfo, PowerPartial } from 'egg';
@@ -39,6 +39,14 @@ export const orm = {
   database: 'forum',
   synchronize: true, // 如果第一次使用，不存在表，有同步的需求可以写 true
   logging: false,
+};
+// redis
+export const redis = {
+  port: 6379,
+  host: '127.0.0.1',
+  family: 4, // 4 (IPv4) or 6 (IPv6)
+  // password: 'auth',
+  db: 0,
 };
 // 配置CORS
 export const cors = {

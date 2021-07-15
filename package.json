@@ -13,6 +13,7 @@
     "egg-cors": "^2.2.3",
     "egg-jwt": "^3.1.7",
     "egg-scripts": "^2.10.0",
+    "ioredis": "^4.27.6",
     "mysql2": "^2.2.5",
     "node-rsa": "^1.1.1",
     "typeorm": "^0.2.34"

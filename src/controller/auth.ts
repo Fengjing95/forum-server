@@ -2,7 +2,7 @@
  * @Date: 2021-07-13 16:30:51
  * @LastEditors: 枫
  * @description: description
- * @LastEditTime: 2021-07-15 09:15:35
+ * @LastEditTime: 2021-07-15 11:28:26
  * @FilePath: /forum-server/src/controller/auth.ts
  */
 import {
@@ -13,11 +13,13 @@ import {
   Provide,
   Plugin,
   Get,
+  Config,
 } from '@midwayjs/decorator';
 import { codeEnum, ResponseData } from '../exceptions/ResponseData';
 import { UserService } from '../service/user';
 import { Context } from 'egg';
 import { IResponseData } from '../interface';
+import { RedisService } from '../service/redis';
 
 @Provide()
 @Controller('/api/auth')
@@ -28,8 +30,17 @@ export class AuthController {
   @Inject()
   userService: UserService;
 
+  @Inject()
+  redisService: RedisService;
+
   @Plugin()
   jwt: any;
+
+  @Config('jwt')
+  JWTConfig: any;
+
+  @Config()
+  RSAKey: any;
 
   /**
    * @description: 登陆
@@ -52,14 +63,34 @@ export class AuthController {
       oldUser.data.name === name &&
       oldUser.data.password === password
     ) {
+      // 生成随机数存储redis
+      let random = '';
+      for (let i = 0; i < 6; i++) {
+        random += Math.floor(Math.random() * 10);
+      }
+      if (
+        this.ctx.request.header['user-agent'].match(
+          /(iPhone|iPod|Android|ios)/i
+        )
+      ) {
+        this.redisService
+          .getClient()
+          .set(`t_${oldUser.data.id}`, JSON.stringify({ phone: random }));
+      } else {
+        this.redisService
+          .getClient()
+          .set(`t_${oldUser.data.id}`, JSON.stringify({ pc: random }));
+      }
+
       // token生成
       const token = await this.jwt.sign(
         {
           username: oldUser.data.name,
           id: oldUser.data.id,
           phone: oldUser.data.phone,
+          randomSign: random,
         },
-        this.ctx.app.config.jwt.signature,
+        this.JWTConfig.signature,
         { expiresIn: 60 * 60 * 24 }
       );
       result = ResponseData.success({ token });
@@ -99,7 +130,7 @@ export class AuthController {
           id: result.data.identifiers[0].id,
           phone: phone,
         },
-        this.ctx.app.config.jwt.signature,
+        this.JWTConfig.signature,
         { expiresIn: 60 * 60 * 24 }
       );
       return ResponseData.success({ token });
@@ -120,7 +151,19 @@ export class AuthController {
   @Get('/publicKey')
   getPublicKey(): IResponseData {
     return ResponseData.success({
-      publicKey: this.ctx.app.config.RSAKey.publicKey,
+      publicKey: this.RSAKey.publicKey,
     });
+  }
+
+  /**
+   * @description: 登出,清除redis中存的sign
+   * @param {*}
+   * @return {*}
+   */
+  @Get('/logout', { middleware: ['verification'] })
+  async logout(): Promise<IResponseData> {
+    const redisIndex = 't_' + this.ctx.identify.id;
+    const successFlag = await this.redisService.getClient().del(redisIndex);
+    return ResponseData.success({ success: successFlag });
   }
 }
