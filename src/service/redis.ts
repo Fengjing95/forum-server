@@ -1,8 +1,8 @@
 /*
  * @Date: 2021-07-15 10:16:05
  * @LastEditors: 枫
- * @description: description
- * @LastEditTime: 2021-07-15 10:29:34
+ * @description: redis单例
+ * @LastEditTime: 2021-07-15 11:43:52
  * @FilePath: /forum-server/src/service/redis.ts
  */
 import {

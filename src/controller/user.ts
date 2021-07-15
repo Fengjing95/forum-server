@@ -2,7 +2,7 @@
  * @Date: 2021-07-12 23:36:36
  * @LastEditors: 枫
  * @description: description
- * @LastEditTime: 2021-07-14 10:12:03
+ * @LastEditTime: 2021-07-15 17:11:49
  * @FilePath: /forum-server/src/controller/user.ts
  */
 import { Body } from '@midwayjs/decorator';

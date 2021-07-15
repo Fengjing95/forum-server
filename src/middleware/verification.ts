@@ -2,7 +2,7 @@
  * @Date: 2021-07-13 15:55:02
  * @LastEditors: 枫
  * @description: 全局token校验中间件
- * @LastEditTime: 2021-07-15 10:59:03
+ * @LastEditTime: 2021-07-15 11:42:39
  * @FilePath: /forum-server/src/middleware/verification.ts
  */
 import { Provide, Plugin, Config, Inject } from '@midwayjs/decorator';
@@ -39,7 +39,7 @@ export class Verification implements IWebMiddleware {
         let verifyFlag: boolean;
         // ctx.logger.error(redisSign);
 
-        // 判断设备,根据设备类型存储redis标识
+        // 判断设备,根据设备类型读取redis标识
         if (
           ctx.request.header['user-agent'].match(/(iPhone|iPod|Android|ios)/i)
         ) {
