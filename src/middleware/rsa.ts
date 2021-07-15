@@ -2,7 +2,7 @@
  * @Date: 2021-07-14 16:05:06
  * @LastEditors: 枫
  * @description: 解密中间件
- * @LastEditTime: 2021-07-14 17:47:56
+ * @LastEditTime: 2021-07-15 09:23:59
  * @FilePath: /forum-server/src/middleware/rsa.ts
  */
 import { Provide } from '@midwayjs/decorator';
@@ -17,7 +17,11 @@ export class Rsa implements IWebMiddleware {
     return async (ctx: Context, next: IMidwayWebNext) => {
       try {
         const password = ctx.request.body.password;
-        ctx.request.body.password = unlock(password);
+        // ctx.logger.error(lock(password, ctx.app.config.RSAKey.publicKey));
+        ctx.request.body.password = unlock(
+          password,
+          ctx.app.config.RSAKey.privateKey
+        );
         await next();
       } catch (error) {
         ctx.response.status = codeEnum.BAD_REQUEST;

@@ -2,7 +2,7 @@
  * @Date: 2021-07-13 16:30:51
  * @LastEditors: 枫
  * @description: description
- * @LastEditTime: 2021-07-14 17:57:43
+ * @LastEditTime: 2021-07-15 09:15:35
  * @FilePath: /forum-server/src/controller/auth.ts
  */
 import {
@@ -17,8 +17,6 @@ import {
 import { codeEnum, ResponseData } from '../exceptions/ResponseData';
 import { UserService } from '../service/user';
 import { Context } from 'egg';
-import { jwt as JWT } from '../config/config.default';
-import { RSAKey } from '../config/config.default';
 import { IResponseData } from '../interface';
 
 @Provide()
@@ -61,7 +59,7 @@ export class AuthController {
           id: oldUser.data.id,
           phone: oldUser.data.phone,
         },
-        JWT.signature,
+        this.ctx.app.config.jwt.signature,
         { expiresIn: 60 * 60 * 24 }
       );
       result = ResponseData.success({ token });
@@ -101,7 +99,7 @@ export class AuthController {
           id: result.data.identifiers[0].id,
           phone: phone,
         },
-        JWT.signature,
+        this.ctx.app.config.jwt.signature,
         { expiresIn: 60 * 60 * 24 }
       );
       return ResponseData.success({ token });
@@ -121,6 +119,8 @@ export class AuthController {
    */
   @Get('/publicKey')
   getPublicKey(): IResponseData {
-    return ResponseData.success({ publicKey: RSAKey.publicKey });
+    return ResponseData.success({
+      publicKey: this.ctx.app.config.RSAKey.publicKey,
+    });
   }
 }

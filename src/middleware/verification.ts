@@ -2,14 +2,13 @@
  * @Date: 2021-07-13 15:55:02
  * @LastEditors: 枫
  * @description: 全局token校验中间件
- * @LastEditTime: 2021-07-14 12:12:36
+ * @LastEditTime: 2021-07-15 09:32:33
  * @FilePath: /forum-server/src/middleware/verification.ts
  */
 import { Provide, Plugin } from '@midwayjs/decorator';
 import { IWebMiddleware, IMidwayWebNext } from '@midwayjs/web';
 import { Context } from 'egg';
 import { codeEnum, ResponseData } from '../exceptions/ResponseData';
-import { jwt as JWT } from '../config/config.default';
 
 @Provide()
 export class Verification implements IWebMiddleware {
@@ -23,8 +22,8 @@ export class Verification implements IWebMiddleware {
       // } else {
       try {
         const authRes = this.jwt.verify(
-          ctx.request.header.Authorization,
-          JWT.signature
+          ctx.request.header.authorization,
+          ctx.app.config.jwt.signature
         );
         if (authRes) {
           ctx.identify = authRes;
@@ -40,6 +39,7 @@ export class Verification implements IWebMiddleware {
             '登陆过期'
           );
         } else {
+          ctx.logger.error(error.message);
           ctx.response.status = codeEnum.UNAUTHORIZED;
           ctx.response.body = ResponseData.error(
             codeEnum.UNAUTHORIZED,
