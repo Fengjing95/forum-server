@@ -2,7 +2,7 @@
  * @Date: 2021-07-13 10:38:20
  * @LastEditors: 枫
  * @description: 用户实体类
- * @LastEditTime: 2021-07-15 23:39:55
+ * @LastEditTime: 2021-07-16 22:58:50
  * @FilePath: /forum-server/src/entity/User.ts
  */
 import { EntityModel } from '@midwayjs/orm';
@@ -11,7 +11,10 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { status } from '../exceptions/enums';
+import { Experience } from './Experience';
 
 @EntityModel('user')
 export class User {
@@ -59,6 +62,11 @@ export class User {
   experience: number;
 
   @Column({
+    default: 0,
+  })
+  level: number;
+
+  @Column({
     default: '保密',
   })
   sex: string;
@@ -81,8 +89,17 @@ export class User {
   signature: string;
 
   @CreateDateColumn()
-  createTime: number;
+  createTime: Date;
 
   @UpdateDateColumn()
-  updatedTime: number;
+  updatedTime: Date;
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  @OneToMany(type => Experience, experience => experience.id)
+  experiences: Experience[];
+
+  @Column({
+    default: status.ACTIVE,
+  })
+  status: status;
 }

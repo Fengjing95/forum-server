@@ -2,7 +2,7 @@
  * @Date: 2021-07-12 23:36:36
  * @LastEditors: 枫
  * @description: description
- * @LastEditTime: 2021-07-14 10:34:16
+ * @LastEditTime: 2021-07-16 23:19:44
  * @FilePath: /forum-server/src/service/user.ts
  */
 import { Provide } from '@midwayjs/decorator';
@@ -10,6 +10,7 @@ import { InjectEntityModel } from '@midwayjs/orm';
 import { User } from '../entity/User';
 import { InsertResult, Repository } from 'typeorm';
 import { IServiceDTO } from '../interface';
+import { compareDate, dateString, getNextDay } from '../util/dateUtil';
 
 @Provide()
 export class UserService {
@@ -95,5 +96,54 @@ export class UserService {
     } else {
       return { success: false, message: '注册失败' };
     }
+  }
+
+  /**
+   * @description: 签到
+   * @param {number} userId 用户ID
+   * @return {*}
+   */
+  async attendance(userId: number): Promise<IServiceDTO<User>> {
+    const { success, data: user, message } = await this.getUserById(userId);
+    if (success) {
+      const last = user.lastAttendance
+        ? dateString(new Date(user.lastAttendance))
+        : '1970-01-01';
+      const now = dateString(new Date());
+      if (last === now) return { success: false, message: '今天已经签到' };
+      const flag = compareDate(getNextDay(last), now);
+      if (flag) {
+        user.attendanceDay += 1;
+        user.lastAttendance = new Date();
+      } else {
+        user.attendanceDay = 1;
+        user.lastAttendance = new Date();
+      }
+      const result = await this.userModel.save(user);
+      return { success: true, data: result };
+    } else {
+      return { success, message };
+    }
+  }
+
+  /**
+   * @description: 获取签到信息
+   * @param {number} userId 用户ID
+   * @return {*}
+   */
+  // async getAttendance(userId: number): Promise<IServiceDTO<User>> {}
+
+  /**
+   * @description: 更新用户经验值
+   * @param {number} expV 经验值
+   * @param {number} userId 用户id
+   * @return {*}
+   */
+  async updateExperience(expV: number, userId: number): Promise<User> {
+    const user = await this.userModel.findOne({ where: { id: userId } });
+    user.experience += expV;
+    // TODO 判断经验值和等级的关系
+    const updateResult = await this.userModel.save(user);
+    return updateResult;
   }
 }

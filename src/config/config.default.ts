@@ -2,7 +2,7 @@
  * @Date: 2021-07-12 23:36:36
  * @LastEditors: 枫
  * @description: description
- * @LastEditTime: 2021-07-15 23:17:05
+ * @LastEditTime: 2021-07-16 22:57:20
  * @FilePath: /forum-server/src/config/config.default.ts
  */
 import { EggAppConfig, EggAppInfo, PowerPartial } from 'egg';
@@ -86,3 +86,16 @@ XZoc9KtemAgo0QX3Fe5hsweOxV8bIz+CP0SNK9FI8yvL8JxK+ceMA4R8rDASXPwp
 SKTHlmMqc+7Ed+c=
 -----END PRIVATE KEY-----`,
 };
+
+export enum addition {
+  BASIS = 5,
+  DAY_1 = 7,
+  DAY_2 = 30,
+  DAY_3 = 100,
+  DAY_4 = 300,
+  PERCENTAGE_1 = 1,
+  PERCENTAGE_2 = 1.05,
+  PERCENTAGE_3 = 1.15,
+  PERCENTAGE_4 = 1.5,
+  PERCENTAGE_5 = 2,
+}
