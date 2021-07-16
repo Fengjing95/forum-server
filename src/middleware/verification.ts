@@ -2,10 +2,11 @@
  * @Date: 2021-07-13 15:55:02
  * @LastEditors: 枫
  * @description: 全局token校验中间件
- * @LastEditTime: 2021-07-15 11:42:39
+ * @LastEditTime: 2021-07-16 00:03:39
  * @FilePath: /forum-server/src/middleware/verification.ts
  */
-import { Provide, Plugin, Config, Inject } from '@midwayjs/decorator';
+import { Provide, Plugin, Config, Inject, Logger } from '@midwayjs/decorator';
+import { ILogger } from '@midwayjs/logger';
 import { IWebMiddleware, IMidwayWebNext } from '@midwayjs/web';
 import { Context } from 'egg';
 import { codeEnum, ResponseData } from '../exceptions/ResponseData';
@@ -18,6 +19,9 @@ export class Verification implements IWebMiddleware {
 
   @Config('jwt')
   JWTConfig: any;
+
+  @Logger('coreLogger')
+  logger: ILogger;
 
   @Inject()
   redisService: RedisService;
@@ -61,7 +65,7 @@ export class Verification implements IWebMiddleware {
             '登陆过期'
           );
         } else {
-          ctx.logger.error(error.message);
+          this.logger.error(error.message);
           ctx.response.status = codeEnum.UNAUTHORIZED;
           ctx.response.body = ResponseData.error(
             codeEnum.UNAUTHORIZED,

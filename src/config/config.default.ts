@@ -2,7 +2,7 @@
  * @Date: 2021-07-12 23:36:36
  * @LastEditors: 枫
  * @description: description
- * @LastEditTime: 2021-07-15 10:47:14
+ * @LastEditTime: 2021-07-15 23:17:05
  * @FilePath: /forum-server/src/config/config.default.ts
  */
 import { EggAppConfig, EggAppInfo, PowerPartial } from 'egg';
@@ -55,7 +55,7 @@ export const cors = {
 };
 // 允许跨域的域名
 export const security = {
-  domainWhiteList: ['http://localhost:8000'], //  允许跨域的域名
+  domainWhiteList: ['http://localhost:8000'], //  允许跨域的域名,*是全都允许
 };
 // jwt密钥盐值
 export const jwt = {

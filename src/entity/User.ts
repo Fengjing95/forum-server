@@ -2,7 +2,7 @@
  * @Date: 2021-07-13 10:38:20
  * @LastEditors: 枫
  * @description: 用户实体类
- * @LastEditTime: 2021-07-13 18:57:58
+ * @LastEditTime: 2021-07-15 23:39:55
  * @FilePath: /forum-server/src/entity/User.ts
  */
 import { EntityModel } from '@midwayjs/orm';
@@ -41,6 +41,27 @@ export class User {
 
   @Column()
   phone: string;
+
+  @Column({
+    default: 0,
+  })
+  attendanceDay: number;
+
+  @Column({
+    type: 'date',
+    nullable: true,
+  })
+  lastAttendance: Date;
+
+  @Column({
+    default: 0,
+  })
+  experience: number;
+
+  @Column({
+    default: '保密',
+  })
+  sex: string;
 
   @Column({
     nullable: true,

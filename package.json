@@ -1,5 +1,5 @@
 {
-  "name": "my-midway-project",
+  "name": "forum-server",
   "version": "1.0.0",
   "description": "",
   "private": true,
@@ -7,6 +7,7 @@
     "@midwayjs/bootstrap": "^2.3.0",
     "@midwayjs/core": "^2.3.0",
     "@midwayjs/decorator": "^2.3.0",
+    "@midwayjs/logger": "^2.11.3",
     "@midwayjs/orm": "^1.3.1",
     "@midwayjs/web": "^2.3.0",
     "egg": "^2.0.0",
