@@ -2,7 +2,7 @@
  * @Date: 2021-07-12 23:36:36
  * @LastEditors: 枫
  * @description: description
- * @LastEditTime: 2021-07-16 23:20:33
+ * @LastEditTime: 2021-07-18 00:37:19
  * @FilePath: /forum-server/src/controller/user.ts
  */
 import { Body } from '@midwayjs/decorator';
@@ -82,7 +82,7 @@ export class UserController {
    * @param {*}
    * @return {*} 用户的签到情况:连续签到天数,当次签到获得经验值
    */
-  @Get('/attendance')
+  @Post('/attendance')
   async attendance(): Promise<IResponseData> {
     const {
       success,
@@ -107,6 +107,50 @@ export class UserController {
         exp: expValue,
       };
       return ResponseData.success(result);
+    } else {
+      return ResponseData.error(codeEnum.BAD_REQUEST, message);
+    }
+  }
+
+  /**
+   * @description: 获取当日是否签到
+   * @param {*}
+   * @return {boolean} true代表当日已签到
+   */
+  @Get('/attendance')
+  async getAttendance(): Promise<IResponseData> {
+    const { success, data, message } = await this.userService.getAttendance(
+      this.ctx.identify.id
+    );
+    if (success) {
+      return ResponseData.success({ data });
+    } else {
+      return ResponseData.error(codeEnum.BAD_REQUEST, message);
+    }
+  }
+
+  /**
+   * @description: 获取经验历史记录
+   * @param {Query number} current 当前页码
+   * @param {Query number} pageSize 页容量
+   * @return {*}
+   */
+  @Get('/expHistory')
+  async getExpHistory(
+    @Query() current = 1,
+    @Query() pageSize = 20
+  ): Promise<IResponseData> {
+    const {
+      success,
+      data: expData,
+      message,
+    } = await this.expService.getExpHistory(
+      this.ctx.identify.id,
+      current,
+      pageSize
+    );
+    if (success) {
+      return ResponseData.success(expData);
     } else {
       return ResponseData.error(codeEnum.BAD_REQUEST, message);
     }

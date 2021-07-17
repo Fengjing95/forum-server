@@ -2,7 +2,7 @@
  * @Date: 2021-07-12 23:36:36
  * @LastEditors: 枫
  * @description: description
- * @LastEditTime: 2021-07-16 22:57:20
+ * @LastEditTime: 2021-07-17 00:15:43
  * @FilePath: /forum-server/src/config/config.default.ts
  */
 import { EggAppConfig, EggAppInfo, PowerPartial } from 'egg';
@@ -86,7 +86,7 @@ XZoc9KtemAgo0QX3Fe5hsweOxV8bIz+CP0SNK9FI8yvL8JxK+ceMA4R8rDASXPwp
 SKTHlmMqc+7Ed+c=
 -----END PRIVATE KEY-----`,
 };
-
+// 连续签到天数及加成
 export enum addition {
   BASIS = 5,
   DAY_1 = 7,
@@ -98,4 +98,13 @@ export enum addition {
   PERCENTAGE_3 = 1.15,
   PERCENTAGE_4 = 1.5,
   PERCENTAGE_5 = 2,
+}
+// 经验等级对应
+export enum level {
+  LEVEL_1 = 10,
+  LEVEL_2 = 100,
+  LEVEL_3 = 500,
+  LEVEL_4 = 1000,
+  LEVEL_5 = 5000,
+  LEVEL_6 = 20000,
 }

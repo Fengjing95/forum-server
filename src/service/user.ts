@@ -2,10 +2,10 @@
  * @Date: 2021-07-12 23:36:36
  * @LastEditors: 枫
  * @description: description
- * @LastEditTime: 2021-07-16 23:19:44
+ * @LastEditTime: 2021-07-17 00:38:32
  * @FilePath: /forum-server/src/service/user.ts
  */
-import { Provide } from '@midwayjs/decorator';
+import { Provide, Config } from '@midwayjs/decorator';
 import { InjectEntityModel } from '@midwayjs/orm';
 import { User } from '../entity/User';
 import { InsertResult, Repository } from 'typeorm';
@@ -16,6 +16,9 @@ import { compareDate, dateString, getNextDay } from '../util/dateUtil';
 export class UserService {
   @InjectEntityModel(User)
   userModel: Repository<User>;
+
+  @Config('level')
+  levelConfig: any;
 
   /**
    * @description: 根据ID查询用户
@@ -131,7 +134,17 @@ export class UserService {
    * @param {number} userId 用户ID
    * @return {*}
    */
-  // async getAttendance(userId: number): Promise<IServiceDTO<User>> {}
+  async getAttendance(userId: number): Promise<IServiceDTO<boolean>> {
+    const { success, data: user, message } = await this.getUserById(userId);
+    if (success) {
+      if (!user.lastAttendance) return { success, data: false };
+      const last = dateString(new Date(user.lastAttendance));
+      const now = dateString(new Date());
+      return { success, data: last === now };
+    } else {
+      return { success, message };
+    }
+  }
 
   /**
    * @description: 更新用户经验值
@@ -141,9 +154,29 @@ export class UserService {
    */
   async updateExperience(expV: number, userId: number): Promise<User> {
     const user = await this.userModel.findOne({ where: { id: userId } });
+    const preLevel = this.computeLevel(user.experience);
     user.experience += expV;
-    // TODO 判断经验值和等级的关系
+    const nextLevel = this.computeLevel(user.experience);
+    if (preLevel !== nextLevel) {
+      user.level = nextLevel;
+      // TODO 发送socket升级消息
+    }
     const updateResult = await this.userModel.save(user);
     return updateResult;
+  }
+
+  /**
+   * @description: 根据经验值计算等级
+   * @param {number} exp 经验值
+   * @return {*}
+   */
+  computeLevel(exp: number): number {
+    if (exp > this.levelConfig.LEVEL_6) return 6;
+    else if (exp > this.levelConfig.LEVEL_5) return 5;
+    else if (exp > this.levelConfig.LEVEL_4) return 4;
+    else if (exp > this.levelConfig.LEVEL_3) return 3;
+    else if (exp > this.levelConfig.LEVEL_2) return 2;
+    else if (exp > this.levelConfig.LEVEL_1) return 1;
+    else return 0;
   }
 }
